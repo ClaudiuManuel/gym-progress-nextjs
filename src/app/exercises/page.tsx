@@ -1,31 +1,20 @@
-"use client";
+'use client';
 
-import React, { useState } from "react";
-import { Edit, Plus, Trash2 } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { ScrollArea } from "@/components/ui/scroll-area";
-import { type Exercise, ExerciseCategory } from "@/types/exerciseTypes";
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import { initialExercises } from "@/lib/constants";
-import ExerciseConfigModal from "@/components/navbar/ExerciseConfigModal";
+import React, { useState } from 'react';
+import { Edit, Plus, Trash2 } from 'lucide-react';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { type Exercise, ExerciseCategory } from '@/types/exerciseTypes';
+import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { initialExercises } from '@/lib/constants';
+import ExerciseConfigModal from '@/components/exercises/ExerciseConfigModal';
 
 export default function Exercises() {
-  const [categoryFilter, setCategoryFilter] = useState<ExerciseCategory>(
-    ExerciseCategory.ALL,
-  );
+  const [categoryFilter, setCategoryFilter] = useState<ExerciseCategory>(ExerciseCategory.ALL);
   const [exercises, setExercises] = useState<Exercise[]>(initialExercises);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [exerciseToBeEdited, setExerciseToBeEdited] = useState<
-    Exercise | undefined
-  >();
+  const [exerciseToBeEdited, setExerciseToBeEdited] = useState<Exercise | undefined>();
 
   const filteredExercises =
     categoryFilter === ExerciseCategory.ALL
@@ -33,9 +22,7 @@ export default function Exercises() {
       : exercises.filter((exercise) => exercise.category === categoryFilter);
 
   const deleteExercise = (deletedExerciseId: number) => {
-    const newExercises = exercises.filter(
-      (exercise) => exercise.id !== deletedExerciseId,
-    );
+    const newExercises = exercises.filter((exercise) => exercise.id !== deletedExerciseId);
     setExercises(newExercises);
   };
 
@@ -64,9 +51,7 @@ export default function Exercises() {
         <CardTitle>Exercise Library</CardTitle>
         <div className="flex flex-row gap-2">
           <Select
-            onValueChange={(newSelectedCategory) =>
-              setCategoryFilter(newSelectedCategory as ExerciseCategory)
-            }
+            onValueChange={(newSelectedCategory) => setCategoryFilter(newSelectedCategory as ExerciseCategory)}
             value={categoryFilter}
           >
             <SelectTrigger className="w-[180px]">
@@ -82,7 +67,7 @@ export default function Exercises() {
               </SelectGroup>
             </SelectContent>
           </Select>
-          <Button variant={"default"} onClick={() => setIsDialogOpen(true)}>
+          <Button variant={'default'} onClick={() => setIsDialogOpen(true)}>
             <Plus className="mr-2 h-4 w-4" /> Add Exercise
           </Button>
           {isDialogOpen && (
@@ -98,33 +83,33 @@ export default function Exercises() {
 
       <CardContent>
         <ScrollArea className="h-[400px] w-full rounded-md border p-4">
-          {filteredExercises.map((exercise) => (
-            <div
-              key={exercise.id}
-              className="flex items-center justify-between py-2"
-            >
-              <div>
-                <h3 className="font-medium">{exercise.name}</h3>
-                <p className="text-sm text-gray-500">
-                  {exercise.category} - {exercise.equipment}
-                </p>
+          {filteredExercises.map((exercise) => {
+            const { id, name, category, equipment } = exercise;
+            return (
+              <div key={exercise.id} className="flex items-center justify-between py-2">
+                <div>
+                  <h3 className="font-medium">{name}</h3>
+                  <p className="text-sm text-gray-500">
+                    {category} - {equipment}
+                  </p>
+                </div>
+                <div>
+                  <Button
+                    size="icon"
+                    onClick={() => {
+                      setExerciseToBeEdited(exercise);
+                      setIsDialogOpen(true);
+                    }}
+                  >
+                    <Edit className="h-4 w-4" />
+                  </Button>
+                  <Button size="icon" onClick={() => deleteExercise(id)}>
+                    <Trash2 className="h-4 w-4" />
+                  </Button>
+                </div>
               </div>
-              <div>
-                <Button
-                  size="icon"
-                  onClick={() => {
-                    setExerciseToBeEdited(exercise);
-                    setIsDialogOpen(true);
-                  }}
-                >
-                  <Edit className="h-4 w-4" />
-                </Button>
-                <Button size="icon" onClick={() => deleteExercise(exercise.id)}>
-                  <Trash2 className="h-4 w-4" />
-                </Button>
-              </div>
-            </div>
-          ))}
+            );
+          })}
         </ScrollArea>
       </CardContent>
     </Card>

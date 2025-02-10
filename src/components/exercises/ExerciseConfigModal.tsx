@@ -1,41 +1,16 @@
 import {
   ExerciseCategory,
+  type ExerciseConfigModalProps,
   ExerciseEquipmentType,
   type Exercise,
-} from "@/types/exerciseTypes";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../ui/dialog";
-import { Button } from "../ui/button";
-import { Label } from "../ui/label";
-import { Input } from "../ui/input";
-import { useState } from "react";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../ui/select";
-
-type ExerciseConfigModalProps = {
-  onModalClose: (open: boolean) => void;
-  exerciseToBeEdited: Exercise | undefined;
-  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onExerciseSave: (newExercise: Exercise) => void;
-};
-
-const defaultExerciseConfiguration = (): Exercise => ({
-  id: Math.floor(Math.random() * 1000), // Random ID for now
-  name: "",
-  category: ExerciseCategory.CHEST,
-  equipment: ExerciseEquipmentType.BARBELL,
-});
+} from '@/types/exerciseTypes';
+import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '../ui/dialog';
+import { Button } from '../ui/button';
+import { Label } from '../ui/label';
+import { Input } from '../ui/input';
+import { useState } from 'react';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '../ui/select';
+import { createDefaultExercise } from './utils';
 
 const ExerciseConfigModal: React.FC<ExerciseConfigModalProps> = ({
   onModalClose,
@@ -43,20 +18,18 @@ const ExerciseConfigModal: React.FC<ExerciseConfigModalProps> = ({
   exerciseToBeEdited,
   onExerciseSave,
 }) => {
-  const actionForExercise = exerciseToBeEdited ? "Edit" : "Add";
+  const actionForExercise = exerciseToBeEdited ? 'Edit' : 'Add';
   const [exerciseDetails, setExerciseDetails] = useState<Exercise>(
-    exerciseToBeEdited
-      ? { ...exerciseToBeEdited }
-      : defaultExerciseConfiguration(),
+    exerciseToBeEdited ? { ...exerciseToBeEdited } : createDefaultExercise(),
   );
 
   const handleModalSubmit = () => {
     if (!exerciseDetails.name) {
-      alert("Please fill in all fields.");
+      alert('Please fill in all fields.');
       return;
     }
     onExerciseSave(exerciseDetails);
-    setExerciseDetails(defaultExerciseConfiguration());
+    setExerciseDetails(createDefaultExercise());
     setIsDialogOpen(false);
   };
 
@@ -65,9 +38,7 @@ const ExerciseConfigModal: React.FC<ExerciseConfigModalProps> = ({
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>{`${actionForExercise} exercise`}</DialogTitle>
-          <DialogDescription>
-            {`${actionForExercise} the details of your exercise.`}
-          </DialogDescription>
+          <DialogDescription>{`${actionForExercise} the details of your exercise.`}</DialogDescription>
         </DialogHeader>
         <div className="grid gap-4 py-4">
           <div className="grid grid-cols-4 items-center gap-4">
@@ -140,8 +111,8 @@ const ExerciseConfigModal: React.FC<ExerciseConfigModalProps> = ({
           </div>
         </div>
         <DialogFooter>
-          <Button type="button" variant={"default"} onClick={handleModalSubmit}>
-            {exerciseToBeEdited ? "Update" : "Add"}
+          <Button type="button" variant={'default'} onClick={handleModalSubmit}>
+            {exerciseToBeEdited ? 'Update' : 'Add'}
           </Button>
         </DialogFooter>
       </DialogContent>

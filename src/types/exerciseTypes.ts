@@ -20,3 +20,10 @@ export type Exercise = {
   category: ExerciseCategory;
   equipment: ExerciseEquipmentType;
 };
+
+export type ExerciseConfigModalProps = {
+  onModalClose: (open: boolean) => void;
+  exerciseToBeEdited: Exercise | undefined;
+  setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onExerciseSave: (newExercise: Exercise) => void;
+};
