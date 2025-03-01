@@ -1,12 +1,11 @@
-import { type Config } from "drizzle-kit";
-
+import { defineConfig } from 'drizzle-kit';
 import { env } from "@/env";
 
-export default {
+export default defineConfig({
   schema: "./src/server/db/schema.ts",
-  dialect: "postgresql",
+  out: './migrations',
+  dialect: 'postgresql',
   dbCredentials: {
-    url: env.POSTGRES_URL,
+    url: env.DATABASE_URL,
   },
-  tablesFilter: ["gym-progress-app_*"],
-} satisfies Config;
+});

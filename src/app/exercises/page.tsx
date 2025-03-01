@@ -9,26 +9,27 @@ import { type Exercise, ExerciseCategory } from '@/types/exerciseTypes';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { initialExercises } from '@/lib/constants';
 import ExerciseConfigModal from '@/components/exercises/ExerciseConfigModal';
+import { addExercise } from '@/actions/exercisesActions';
 
 export default function Exercises() {
   const [categoryFilter, setCategoryFilter] = useState<ExerciseCategory>(ExerciseCategory.ALL);
-  const [exercises, setExercises] = useState<Exercise[]>(initialExercises);
+  const [exercisesLocal, setExercises] = useState<Exercise[]>(initialExercises);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
   const [exerciseToBeEdited, setExerciseToBeEdited] = useState<Exercise | undefined>();
 
   const filteredExercises =
     categoryFilter === ExerciseCategory.ALL
-      ? exercises
-      : exercises.filter((exercise) => exercise.category === categoryFilter);
+      ? exercisesLocal
+      : exercisesLocal.filter((exercise) => exercise.category === categoryFilter);
 
   const deleteExercise = (deletedExerciseId: number) => {
-    const newExercises = exercises.filter((exercise) => exercise.id !== deletedExerciseId);
+    const newExercises = exercisesLocal.filter((exercise) => exercise.id !== deletedExerciseId);
     setExercises(newExercises);
   };
 
-  const onExerciseSave = (newExercise: Exercise) => {
+  const onExerciseSave = async (newExercise: Exercise) => {
     if (exerciseToBeEdited) {
-      const updatedExercises = exercises.map((exercise) => {
+      const updatedExercises = exercisesLocal.map((exercise) => {
         if (exercise.id === exerciseToBeEdited.id) {
           return newExercise;
         }
@@ -36,7 +37,8 @@ export default function Exercises() {
       });
       setExercises(updatedExercises);
     } else {
-      setExercises([...exercises, newExercise]);
+      await addExercise(newExercise);
+      setExercises([...exercisesLocal, newExercise]);
     }
   };
 
