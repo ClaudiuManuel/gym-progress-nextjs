@@ -1,17 +1,17 @@
 export enum ExerciseCategory {
-  ALL = "All",
-  CHEST = "Chest",
-  LEGS = "Legs",
-  BACK = "Back",
-  SHOULDERS = "Shoulders",
-  ARMS = "Arms",
+  ALL = 'All',
+  CHEST = 'Chest',
+  LEGS = 'Legs',
+  BACK = 'Back',
+  SHOULDERS = 'Shoulders',
+  ARMS = 'Arms',
 }
 
 export enum ExerciseEquipmentType {
-  MACHINE = "Machine",
-  BODYWEIGHT = "Bodyweight",
-  DUMBELL = "Dumbell",
-  BARBELL = "Barbell",
+  MACHINE = 'Machine',
+  BODYWEIGHT = 'Bodyweight',
+  DUMBELL = 'Dumbell',
+  BARBELL = 'Barbell',
 }
 
 export type Exercise = {
@@ -23,7 +23,11 @@ export type Exercise = {
 
 export type ExerciseConfigModalProps = {
   onModalClose: (open: boolean) => void;
-  exerciseToBeEdited: Exercise | undefined;
   setIsDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onExerciseSave: (newExercise: Exercise) => void;
+  exerciseToBeEdited?: Exercise;
+};
+
+export type ExerciseList = {
+  categoryFilter?: ExerciseCategory;
 };
